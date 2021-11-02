@@ -13,6 +13,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using HotelListing.Configurations;
 using HotelListing.Data;
+using HotelListing.IRepository;
+using HotelListing.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelListing
@@ -67,6 +69,12 @@ namespace HotelListing
             services.AddAutoMapper(typeof(MapperInitializer));
 
             #endregion
+
+            #region Transient
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,6 +97,10 @@ namespace HotelListing
 
             app.UseEndpoints(endpoints =>
             {
+                //endpoints.MapControllerRoute(
+                //    name: "default",
+                //    pattern: "{controller=Home}/{action=Index}/{id?}"
+                //);
                 endpoints.MapControllers();
             });
         }
