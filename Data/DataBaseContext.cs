@@ -15,6 +15,53 @@ namespace HotelListing.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Country>().HasData(
+                new Country()
+                {
+                    CountryId = 1,
+                    Name = "jamaica",
+                    ShortName = "JM"
+                },
+                new Country()
+                {
+                    CountryId = 2,
+                    Name = "Bahamas",
+                    ShortName = "Bs"
+                },
+                new Country()
+                {
+                    CountryId = 3,
+                    Name = "Cayman Island",
+                    ShortName = "CI"
+                }
+            );
+
+            modelBuilder.Entity<Hotel>().HasData(
+                new Hotel()
+                {
+                    HotelId = 1,
+                    Name = "Sandals Resort",
+                    Address = "Negril",
+                    Rating = 4.5,
+                    CountryId = 1
+                },
+                new Hotel()
+                {
+                    HotelId = 2,
+                    Name = "Comfort Suites",
+                    CountryId = 2,
+                    Address = "George Town",
+                    Rating = 4.4,
+                },
+                new Hotel()
+                {
+                    HotelId = 3,
+                    Name = "Grand Palldium",
+                    CountryId = 3,
+                    Address = "Nassua",
+                    Rating = 4.6,
+                }
+            );
             base.OnModelCreating(modelBuilder);
         }
 
