@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using HotelListing.IRepository;
+using HotelListing.Models;
 using Microsoft.Extensions.Logging;
 
 namespace HotelListing.Controllers
@@ -13,13 +15,15 @@ namespace HotelListing.Controllers
     [ApiController]
     public class CountryController : ControllerBase
     {
-        private IUnitOfWork _unitOfWork;
-        private ILogger _logger;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<CountryController> _logger;
+        private readonly IMapper _mapper;
 
-        public CountryController(IUnitOfWork unitOfWork, ILogger logger)
+        public CountryController(IUnitOfWork unitOfWork, ILogger<CountryController> logger, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -28,7 +32,25 @@ namespace HotelListing.Controllers
             try
             {
                 var countries = await _unitOfWork.Countries.GetAll();
-                return Ok(countries);
+                var results = _mapper.Map<IList<CountryDTO>>(countries);
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something Went Wrong in the {nameof(GetCountries)}");
+                return StatusCode(500, "Internal Server Error ,Please Try Again Later");
+            }
+        }
+
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetCountry(int id)
+        {
+            try
+            {
+                var country = await _unitOfWork.Countries.Get(c=>c.CountryId==id,new List<string>() {"Hotels"});
+                var results = _mapper.Map<CountryDTO>(country);
+                return Ok(results);
             }
             catch (Exception ex)
             {
