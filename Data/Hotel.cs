@@ -15,9 +15,7 @@ namespace HotelListing.Data
 
         #region Relations
 
-        [ForeignKey(nameof(Country))]
-        public Country Country { get; set; }
-
+        [ForeignKey("Country")]
         public int CountryId { get; set; }
 
         #endregion
