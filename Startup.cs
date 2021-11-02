@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HotelListing.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelListing
 {
@@ -29,6 +31,18 @@ namespace HotelListing
 
             services.AddControllers();
 
+
+            #region DbContext
+
+            services.AddDbContext<DataBaseContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"));
+            });
+
+            #endregion
+
+            #region Cors
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll", builder =>
@@ -37,10 +51,17 @@ namespace HotelListing
                 });
             });
 
+            #endregion
+
+            #region Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "HotelListing", Version = "v1" });
             });
+
+            #endregion
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,7 +75,7 @@ namespace HotelListing
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HotelListing v1"));
 
             app.UseHttpsRedirection();
-            
+
             app.UseCors("AllowAll");
 
             app.UseRouting();
