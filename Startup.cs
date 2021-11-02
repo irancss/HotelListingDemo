@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HotelListing.Configurations;
 using HotelListing.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -61,7 +62,11 @@ namespace HotelListing
 
             #endregion
 
+            #region Auto Mapper
 
+            services.AddAutoMapper(typeof(MapperInitializer));
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

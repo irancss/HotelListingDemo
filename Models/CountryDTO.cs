@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using HotelListing.Data;
 
 namespace HotelListing.Models
 {
@@ -20,5 +21,6 @@ namespace HotelListing.Models
     public class CountryDTO : CreateCountryDTO
     {
         public int CountryId { get; set; }
+        public List<HotelDTO> Hotels { get; set; }
     }
 }
