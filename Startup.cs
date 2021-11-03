@@ -43,12 +43,18 @@ namespace HotelListing
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"));
             });
 
+            #endregion
+           
             #region Identity
 
             services.AddAuthentication();
             services.ConfigureIdentity();
 
             #endregion
+
+            #region Jwt
+
+            services.ConfigureJwt(Configuration);
 
             #endregion
 
