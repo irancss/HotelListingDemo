@@ -15,6 +15,7 @@ using HotelListing.Configurations;
 using HotelListing.Data;
 using HotelListing.IRepository;
 using HotelListing.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelListing
@@ -41,6 +42,11 @@ namespace HotelListing
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"));
             });
+
+            #region Identity
+
+
+            #endregion
 
             #endregion
 

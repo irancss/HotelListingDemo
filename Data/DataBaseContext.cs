@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelListing.Data
 {
-    public class DataBaseContext : DbContext
+    public class DataBaseContext : IdentityDbContext
     {
         public DataBaseContext(DbContextOptions options) : base(options)
         {
@@ -15,6 +16,7 @@ namespace HotelListing.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             modelBuilder.Entity<Country>().HasData(
                 new Country()
                 {
@@ -63,6 +65,7 @@ namespace HotelListing.Data
                 }
             );
             base.OnModelCreating(modelBuilder);
+
         }
 
         public DbSet<Country> Countries { get; set; }
