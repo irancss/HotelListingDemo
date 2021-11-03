@@ -45,7 +45,8 @@ namespace HotelListing
 
             #region Identity
 
-
+            services.AddAuthentication();
+            services.ConfigureIdentity();
 
             #endregion
 
