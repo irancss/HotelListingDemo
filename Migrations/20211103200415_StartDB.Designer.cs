@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelListing.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20211103173421_addIdentityTables")]
-    partial class addIdentityTables
+    [Migration("20211103200415_StartDB")]
+    partial class StartDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -117,19 +117,19 @@ namespace HotelListing.Migrations
                         new
                         {
                             CountryId = 1,
-                            Name = "jamaica",
+                            Name = "Jamaica",
                             ShortName = "JM"
                         },
                         new
                         {
                             CountryId = 2,
                             Name = "Bahamas",
-                            ShortName = "Bs"
+                            ShortName = "BS"
                         },
                         new
                         {
                             CountryId = 3,
-                            Name = "Cayman Island",
+                            Name = "Cyman Island",
                             ShortName = "CI"
                         });
                 });
@@ -211,6 +211,22 @@ namespace HotelListing.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "6c03cf84-ed34-46a0-b811-eb663bbb4535",
+                            ConcurrencyStamp = "f1fcfbd7-0440-4b62-b7d7-19ebfd9921a7",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
+                        },
+                        new
+                        {
+                            Id = "80be19ff-e029-45a4-aa97-3cb7a0523f0d",
+                            ConcurrencyStamp = "043f08b2-22a0-4c35-9d6d-83bc79d73cc5",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

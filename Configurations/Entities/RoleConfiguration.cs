@@ -20,16 +20,10 @@ namespace HotelListing.Configurations.Entities
                 },
                 new IdentityRole
                 {
-                    Name = "Admin",
-                    NormalizedName = "ADMIN"
-                },
-                new IdentityRole
-                {
-                    Name = "Helper",
-                    NormalizedName = "HELPER"
+                    Name = "Administrator",
+                    NormalizedName = "ADMINISTRATOR"
                 }
             );
-
         }
     }
 }

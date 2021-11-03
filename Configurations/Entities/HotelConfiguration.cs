@@ -37,9 +37,6 @@ namespace HotelListing.Configurations.Entities
                     Address = "Nassua",
                     Rating = 4.6,
                 }
-
-
-
             );
         }
     }
