@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HotelListing.Configurations.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,8 @@ namespace HotelListing.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Country>().HasData(
                 new Country()
                 {
@@ -64,8 +66,8 @@ namespace HotelListing.Data
                     Rating = 4.6,
                 }
             );
-            base.OnModelCreating(modelBuilder);
 
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
         }
 
         public DbSet<Country> Countries { get; set; }
