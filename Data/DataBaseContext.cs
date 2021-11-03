@@ -68,6 +68,8 @@ namespace HotelListing.Data
             );
 
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new HotelConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
         }
 
         public DbSet<Country> Countries { get; set; }
