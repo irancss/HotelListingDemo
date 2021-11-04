@@ -5,8 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using HotelListing.Data;
 using HotelListing.IRepository;
 using HotelListing.Models;
+using HotelListing.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
 namespace HotelListing.Controllers
@@ -18,6 +21,7 @@ namespace HotelListing.Controllers
         private IMapper _mapper;
         private IUnitOfWork _unitOfWork;
         private ILogger<HotelController> _logger;
+
 
         public HotelController(IMapper mapper, IUnitOfWork unitOfWork, ILogger<HotelController> logger)
         {
@@ -45,7 +49,8 @@ namespace HotelListing.Controllers
             }
         }
 
-        [HttpGet("{id:int}")]
+        [Authorize]
+        [HttpGet("{id:int}", Name = "GetHotel")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetHotel(int id)
@@ -62,5 +67,45 @@ namespace HotelListing.Controllers
                 return StatusCode(500, "Internal Server Error ,Please Try Again Later");
             }
         }
+
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateHotel([FromBody] CreateHotelDTO hotelDTO)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError($"Invalid Post attempt in {nameof(CreateHotel)}");
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var hotel = _mapper.Map<Hotel>(hotelDTO);
+                await _unitOfWork.Hotels.Insert(hotel);
+                await _unitOfWork.Save();
+
+
+                return CreatedAtRoute("GetHotel", new { id = hotel.HotelId }, hotel);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went Wrong in {nameof(CreateHotel)}");
+                return StatusCode(500, "Internal Server Error . please try Later");
+            }
+
+
+
+        }
+
+
+
+
+
     }
 }

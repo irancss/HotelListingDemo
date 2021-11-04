@@ -34,7 +34,10 @@ namespace HotelListing
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
 
 
             #region DbContext
@@ -45,7 +48,7 @@ namespace HotelListing
             });
 
             #endregion
-           
+
             #region Identity
 
             services.AddAuthentication();
@@ -110,6 +113,7 @@ namespace HotelListing
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
