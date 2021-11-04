@@ -5,7 +5,9 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using HotelListing.Data;
 using HotelListing.IRepository;
+using HotelListing.Models;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 
 namespace HotelListing.Repository
 {
@@ -46,8 +48,8 @@ namespace HotelListing.Repository
         public async Task<IList<T>> GetAll(Expression<Func<T, bool>> expression = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, List<string> includes = null)
         {
             IQueryable<T> query = _db;
-            
-            
+
+
             if (expression != null)
             {
                 query = query.Where(expression);
@@ -81,6 +83,23 @@ namespace HotelListing.Repository
         {
             _db.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
+        }
+
+        public async Task<IPagedList<T>> GetAll(RequestParams requestParams, List<string> includes = null)
+        {
+            IQueryable<T> query = _db;
+
+
+            if (includes != null)
+            {
+                foreach (var includeProperty in includes)
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
+            return await query.AsNoTracking()
+                .ToPagedListAsync(requestParams.PageNumber, requestParams.PageSize);
         }
     }
 }
