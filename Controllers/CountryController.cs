@@ -117,7 +117,7 @@ namespace HotelListing.Controllers
                 {
                     _logger.LogError($"Invalid Update attempt in {nameof(UpdateCountry)}");
                 }
-                
+
                 _mapper.Map(countryDTO, country);
                 _unitOfWork.Countries.Update(country);
                 await _unitOfWork.Save();
@@ -128,6 +128,42 @@ namespace HotelListing.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Something went Wrong in {nameof(UpdateCountry)}");
+                return StatusCode(500, "Internal Server Error . please try Later");
+            }
+        }
+
+
+        [Authorize(Roles = "Administrator")]
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteCountry(int id)
+        {
+            if (id < 1)
+            {
+                _logger.LogError($"Invalid Delete attempt in {nameof(DeleteCountry)}");
+                return BadRequest();
+            }
+
+            try
+            {
+                var country = await _unitOfWork.Countries.Get(c => c.CountryId == id);
+                if (country == null)
+                {
+                    _logger.LogError($"Invalid Delete attempt in {nameof(DeleteCountry)}");
+                    return BadRequest("Submitted data is invalid");
+                }
+
+                await _unitOfWork.Countries.Delete(id);
+                await _unitOfWork.Save();
+
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went Wrong in {nameof(DeleteCountry)}");
                 return StatusCode(500, "Internal Server Error . please try Later");
             }
         }
