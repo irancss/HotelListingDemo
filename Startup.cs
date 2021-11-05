@@ -62,6 +62,8 @@ namespace HotelListing
 
             #endregion
 
+            
+
             #region Cors
 
             services.AddCors(options =>
@@ -105,6 +107,12 @@ namespace HotelListing
             }
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HotelListing v1"));
+           
+            #region ExceptionHandler
+
+            app.ConfigureExceptionHandler();
+
+            #endregion
 
             app.UseHttpsRedirection();
 
