@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AspNetCoreRateLimit;
 using AutoMapper.Configuration;
 using AutoMapper.Mappers;
 using HotelListing.Data;
@@ -131,5 +132,33 @@ namespace HotelListing
 
         #endregion
 
+
+
+        #region Configure Rate Limiting
+
+        public static void ConfigureRateLimiting(this IServiceCollection services)
+        {
+            var rateLimitedRules = new List<RateLimitRule>()
+            {
+                new RateLimitRule()
+                {
+                    Endpoint = "*",
+                    Limit = 1,
+                    Period = "1s"
+                }
+            };
+            services.Configure<IpRateLimitOptions>(options =>
+            {
+                options.GeneralRules = rateLimitedRules;
+            });
+
+
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
+        }
+
+        #endregion
     }
 }

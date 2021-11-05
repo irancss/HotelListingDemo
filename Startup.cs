@@ -46,8 +46,13 @@ namespace HotelListing
             });
 
 
-            #region Add http Caching header
+            #region Memory Cache
 
+            services.AddMemoryCache();
+
+            #endregion
+
+            #region Add http Caching header
             services.ConfigureHttpCacheHeaders();
             #endregion
 

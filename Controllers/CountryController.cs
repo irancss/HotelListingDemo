@@ -8,6 +8,7 @@ using AutoMapper;
 using HotelListing.Data;
 using HotelListing.IRepository;
 using HotelListing.Models;
+using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
@@ -30,6 +31,10 @@ namespace HotelListing.Controllers
 
         [HttpGet]
         //[ResponseCache(CacheProfileName = "120SecondsDuration")]     Removed *** This option added in Startup
+        //**********Start For Custom Caching an Action **********//
+        [HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 60)]
+        [HttpCacheValidation(MustRevalidate = false)]
+        //**********End For Custom Caching an Action **********//
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCountries([FromQuery] RequestParams requestParams)
