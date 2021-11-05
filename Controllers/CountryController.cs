@@ -29,7 +29,7 @@ namespace HotelListing.Controllers
         }
 
         [HttpGet]
-        [ResponseCache(CacheProfileName = "120SecondsDuration")]
+        //[ResponseCache(CacheProfileName = "120SecondsDuration")]     Removed *** This option added in Startup
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCountries([FromQuery] RequestParams requestParams)
@@ -43,7 +43,7 @@ namespace HotelListing.Controllers
 
 
         [HttpGet("{id:int}", Name = "GetCountry")]
-        [ResponseCache(CacheProfileName = "120SecondsDuration")]
+        //[ResponseCache(CacheProfileName = "120SecondsDuration")]      Removed *** This option added in Startup
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCountry(int id)
