@@ -62,7 +62,7 @@ namespace HotelListing
 
             #endregion
 
-            
+
 
             #region Cors
 
@@ -96,6 +96,12 @@ namespace HotelListing
             services.AddScoped<IAuthManager, AuthManager>();
 
             #endregion
+
+            #region Api Configuration Versioning
+
+            services.ConfigureVersioning();
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -107,7 +113,7 @@ namespace HotelListing
             }
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HotelListing v1"));
-           
+
             #region ExceptionHandler
 
             app.ConfigureExceptionHandler();
