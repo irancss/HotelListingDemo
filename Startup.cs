@@ -132,7 +132,7 @@ namespace HotelListing
 
             #region ExceptionHandler
 
-            //app.ConfigureExceptionHandler();
+            app.ConfigureExceptionHandler();
 
             #endregion
 

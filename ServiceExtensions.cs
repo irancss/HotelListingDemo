@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
+
+
 namespace HotelListing
 {
     public static class ServiceExtensions
@@ -95,15 +97,25 @@ namespace HotelListing
 
         #region Configure versioning
 
-        public static void ConfigureVersioning(this IServiceCollection service)
+        public static void ConfigureVersioning(this IServiceCollection services)
         {
-            service.AddApiVersioning(options =>
+            services.AddApiVersioning(options =>
             {
                 options.ReportApiVersions = true;
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.DefaultApiVersion = new ApiVersion(1, 0);
                 options.ApiVersionReader = new HeaderApiVersionReader("api-version");
             });
+        }
+
+        #endregion
+
+        #region Configure Http Cache Headers
+
+        public static void ConfigureHttpCacheHeaders(this IServiceCollection services)
+        {
+            services.AddResponseCaching();
+            services.AddHttpCacheHeaders();
         }
 
         #endregion
