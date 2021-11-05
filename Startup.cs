@@ -34,11 +34,18 @@ namespace HotelListing
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers().AddNewtonsoftJson(options =>
+            services.AddControllers(config =>
+            {
+                config.CacheProfiles.Add("120SecondsDuration",new CacheProfile()
+                {
+                    Duration = 120
+                });
+            }).AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
+            
 
             #region DbContext
 
@@ -49,6 +56,12 @@ namespace HotelListing
 
             #endregion
 
+            #region Caching Api
+
+            services.AddResponseCaching();
+
+            #endregion
+            
             #region Identity
 
             services.AddAuthentication();
@@ -61,8 +74,6 @@ namespace HotelListing
             services.ConfigureJwt(Configuration);
 
             #endregion
-
-
 
             #region Cors
 
@@ -102,6 +113,8 @@ namespace HotelListing
             services.ConfigureVersioning();
 
             #endregion
+
+         
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -112,11 +125,14 @@ namespace HotelListing
                 app.UseDeveloperExceptionPage();
             }
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HotelListing v1"));
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "HotelListing v1");
+            });
 
             #region ExceptionHandler
 
-            app.ConfigureExceptionHandler();
+            //app.ConfigureExceptionHandler();
 
             #endregion
 
@@ -124,7 +140,9 @@ namespace HotelListing
 
             app.UseCors("AllowAll");
 
+            app.UseResponseCaching();
             app.UseRouting();
+
 
             app.UseAuthorization();
             app.UseAuthentication();
