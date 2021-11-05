@@ -142,12 +142,7 @@ namespace HotelListing.Controllers
             return NoContent();
 
 
-
         }
-
-
-
-
 
     }
 }
