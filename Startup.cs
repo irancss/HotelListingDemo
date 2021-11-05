@@ -36,7 +36,7 @@ namespace HotelListing
 
             services.AddControllers(config =>
             {
-                config.CacheProfiles.Add("120SecondsDuration",new CacheProfile()
+                config.CacheProfiles.Add("120SecondsDuration", new CacheProfile()
                 {
                     Duration = 120
                 });
@@ -45,7 +45,11 @@ namespace HotelListing
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
-            
+
+            #region Add http Caching header
+
+            services.ConfigureHttpCacheHeaders();
+            #endregion
 
             #region DbContext
 
@@ -61,7 +65,7 @@ namespace HotelListing
             services.AddResponseCaching();
 
             #endregion
-            
+
             #region Identity
 
             services.AddAuthentication();
@@ -114,7 +118,7 @@ namespace HotelListing
 
             #endregion
 
-         
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -141,6 +145,9 @@ namespace HotelListing
             app.UseCors("AllowAll");
 
             app.UseResponseCaching();
+
+            app.UseHttpCacheHeaders();
+
             app.UseRouting();
 
 
