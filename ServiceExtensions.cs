@@ -4,12 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper.Configuration;
+using AutoMapper.Mappers;
 using HotelListing.Data;
+using HotelListing.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 namespace HotelListing
 {
@@ -54,6 +60,34 @@ namespace HotelListing
                 };
             });
         }
+        #endregion
+
+        #region Show Error
+
+        public static void ConfigureExceptionHandler(this IApplicationBuilder app)
+        {
+            app.UseExceptionHandler(options =>
+            {
+                options.Run(async context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    context.Response.ContentType = "application/json";
+
+                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    if (contextFeature != null)
+                    {
+                        Log.Error($"Something Went Wrong in this {contextFeature.Error}");
+
+                        await context.Response.WriteAsync(new Error
+                        {
+                            StatusCode = context.Response.StatusCode,
+                            Message = "Internal Server Error. Please try again later"
+                        }.ToString());
+                    }
+                });
+            });
+        }
+
         #endregion
 
     }
