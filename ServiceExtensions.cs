@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
@@ -85,6 +86,21 @@ namespace HotelListing
                         }.ToString());
                     }
                 });
+            });
+        }
+
+        #endregion
+
+
+        #region Configure versioning
+
+        public static void ConfigureVersioning(this IServiceCollection service)
+        {
+            service.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
             });
         }
 
