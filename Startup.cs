@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreRateLimit;
 using HotelListing.Configurations;
 using HotelListing.Data;
 using HotelListing.IRepository;
@@ -49,6 +50,13 @@ namespace HotelListing
             #region Memory Cache
 
             services.AddMemoryCache();
+
+            #endregion
+
+            #region Rate Limiting Api
+
+            services.ConfigureRateLimiting();
+            services.AddHttpContextAccessor();
 
             #endregion
 
@@ -139,19 +147,19 @@ namespace HotelListing
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "HotelListing v1");
             });
 
-            #region ExceptionHandler
 
             app.ConfigureExceptionHandler();
-
-            #endregion
 
             app.UseHttpsRedirection();
 
             app.UseCors("AllowAll");
 
-            app.UseResponseCaching();
 
+            app.UseResponseCaching();
             app.UseHttpCacheHeaders();
+
+
+            app.UseIpRateLimiting();
 
             app.UseRouting();
 
